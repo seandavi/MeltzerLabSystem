@@ -1,0 +1,70 @@
+graph example1 {
+	subgraph cluster_0 {
+		style=filled;
+		color=green;
+		node1 -- node2;
+		label = "Small HPC system";
+		{ rank=same; node2, node1 };
+		
+	}
+
+	subgraph cluster_1 {
+		node [style=filled];
+		b0[label="Hot Archival\nStorage (Tier 2-3)"];
+		b1[label="HPC File System\n(Tier 1)"];
+		b2[label="Long-term storage\n(?Cleversafe)"];
+		b0 -- node1;
+		b0 -- node2;
+		b1 -- node1;
+		b1 -- node2;
+		b2 -- node1;
+		b2 -- node2;
+		label = "Storage";
+		color=lightblue;
+		style=filled;
+	}
+	subgraph cluster_2 {
+		style=filled;
+		color=yellow;
+		label="Application Stack";
+		
+		c0[label="MySQL/MariaDB\nServer"];
+		c1[label="Web Server"];
+		c0 -- c1;
+		c0 -- node1;
+		c0 -- node2;
+		c1 -- b0;
+		c1 -- b1;
+		c1 -- b2;
+		
+	}
+	subgraph cluster_3 {
+		style=filled;
+		color=red;
+		label="End Users";
+		d0[label="Users' machines"];
+		d1[label="Web Client"];
+		c1 -- d1;
+		b0 -- d0;
+		b1 -- d0;
+		b2 -- d0;
+	}
+	subgraph cluster_4 {
+		style=filled;
+		color=lightgrey;
+		label="Sequencers\n(SPE)"
+		s0[label="HiSeq1"];
+		s1[label="HiSeq2"];
+		s2[label="NextSeq"];
+		s3[label="MiSeq"];
+		s0 -- b0;
+		s1 -- b0;
+		s2 -- b0;
+		s3 -- b0;
+	}
+	node1 -- Biowulf [style=dashed, color=grey];
+	node2 -- Biowulf [style=dashed, color=grey];
+	c0 -- Biowulf;
+	
+}
+
