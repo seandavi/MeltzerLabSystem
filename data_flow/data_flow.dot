@@ -1,0 +1,36 @@
+digraph dataflow {
+	subgraph cluster_0 {
+		style=filled;
+		color=green;
+		Aphasia -> Amnesia [label="rsync" labeltooltip="rsync performed daily\nFull backup"];
+		label = "Meltzer Lab Storage";
+	}
+
+	subgraph cluster_4 {
+		style=filled;
+		color=lightgrey;
+		label="Sequencers\n(SPE)"
+		HiSeq1[label="HiSeq1"];
+		HiSeq2[label="HiSeq2"];
+		NextSeq[label="NextSeq"];
+		MiSeq[label="MiSeq"];
+		HiSeq1 -> Aphasia [label="CIFS, direct"];
+		HiSeq2 -> Aphasia [label="CIFS, direct"];
+		NextSeq -> Aphasia [label="CIFS, direct"];
+		MiSeq -> Aphasia [label="CIFS, direct"];
+	}
+	subgraph cluster_2 {
+		label="NCI/CCR/CBIIT resources";
+		Cleversafe;
+		Globus;
+		NCIBackup;
+		Aphasia -> Cleversafe [label="s3 mechanisms" labeltooltip="automated, cron"];
+	}
+	Biowulf -> Globus [label="Globus, ad hoc\nArchive", style=dashed];
+	Aphasia -> Biowulf [label="manual transfers" style=dashed];
+	Biowulf -> Aphasia [label="manual transfers" style=dashed];
+	Aphasia -> NCIBackup [label="NCI Backup Rotation"];
+	Aphasia -> "User Desktops" [label="CIFS"]
+	"User Desktops" -> Aphasia [label="CIFS"]
+}
+
